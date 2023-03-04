@@ -49,6 +49,7 @@ class _VideoSDKQuickStartState extends State<VideoSDKQuickStart> {
                   setState(() => isMeetingActive = true);
                 },
               ),
+              print("ali");
       ),
     );
   }
