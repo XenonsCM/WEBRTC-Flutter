@@ -1,4 +1,4 @@
-import '/auth/auth_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -37,6 +37,8 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -44,6 +46,10 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         automaticallyImplyLeading: false,
         leading: InkWell(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () async {
             Navigator.pop(context);
           },
@@ -133,7 +139,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                     );
                     return;
                   }
-                  await resetPassword(
+                  await authManager.resetPassword(
                     email: _model.emailAddressController.text,
                     context: context,
                   );

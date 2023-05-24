@@ -1,4 +1,4 @@
-import '/auth/auth_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
@@ -84,6 +84,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<UsersRecord>(
       stream: UsersRecord.getDocument(currentUserReference!),
       builder: (context, snapshot) {
@@ -127,9 +129,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                                   Align(
                                     alignment: AlignmentDirectional(0.0, 0.0),
                                     child: Image.asset(
-                                      'assets/images/hero@2x.png',
+                                      'assets/images/vafee-logo-1.png',
                                       width: MediaQuery.of(context).size.width *
-                                          1.0,
+                                          0.594,
                                       height: 200.0,
                                       fit: BoxFit.cover,
                                     ),
@@ -140,6 +142,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 160.0, 0.0, 0.0),
                                       child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
                                         onTap: () async {
                                           final selectedMedia =
                                               await selectMedia(
@@ -180,6 +186,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                                                                 width: m
                                                                     .dimensions
                                                                     ?.width,
+                                                                blurHash:
+                                                                    m.blurHash,
                                                               ))
                                                       .toList();
 
@@ -319,6 +327,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                   children: [
                     if (!(Theme.of(context).brightness == Brightness.dark))
                       InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
                         onTap: () async {
                           setDarkModeSetting(context, ThemeMode.dark);
                           if (animationsMap[
@@ -419,6 +431,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                       ),
                     if (Theme.of(context).brightness == Brightness.dark)
                       InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
                         onTap: () async {
                           setDarkModeSetting(context, ThemeMode.light);
                           if (animationsMap[
@@ -520,7 +536,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                   ],
                 ),
               ),
-              if (!myProfileUsersRecord.isGuest!)
+              if (!myProfileUsersRecord.isGuest)
                 Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -544,7 +560,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                     ),
                   ],
                 ),
-              if (!myProfileUsersRecord.isGuest!)
+              if (!myProfileUsersRecord.isGuest)
                 Expanded(
                   child: ListView(
                     padding: EdgeInsets.zero,
@@ -575,6 +591,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                                   shape: BoxShape.rectangle,
                                 ),
                                 child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
                                   onTap: () async {
                                     await Navigator.push(
                                       context,
@@ -641,6 +661,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                                 shape: BoxShape.rectangle,
                               ),
                               child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                                 onTap: () async {
                                   await Navigator.push(
                                     context,
@@ -689,7 +713,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget>
                           children: [
                             FFButtonWidget(
                               onPressed: () async {
-                                await signOut();
+                                await authManager.signOut();
                                 await Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(

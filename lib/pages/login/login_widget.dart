@@ -1,5 +1,6 @@
-import '/auth/auth_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/components/mailverification_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -43,6 +44,8 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).dark900,
@@ -69,7 +72,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 24.0),
                   child: Image.asset(
-                    'assets/images/logoGeekMessaging.png',
+                    'assets/images/vafee-logo-1.png',
                     width: 160.0,
                     height: 140.0,
                     fit: BoxFit.cover,
@@ -234,7 +237,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ),
                 FFButtonWidget(
                   onPressed: () async {
-                    final user = await signInWithEmail(
+                    final user = await authManager.signInWithEmail(
                       context,
                       _model.emailTextController.text,
                       _model.passwordTextController.text,
@@ -243,13 +246,29 @@ class _LoginWidgetState extends State<LoginWidget> {
                       return;
                     }
 
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            NavBarPage(initialPage: 'chatMain'),
-                      ),
-                    );
+                    if (currentUserEmailVerified == true) {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NavBarPage(initialPage: 'HomePage'),
+                        ),
+                      );
+                    } else {
+                      await showModalBottomSheet(
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        enableDrag: false,
+                        context: context,
+                        builder: (bottomSheetContext) {
+                          return Padding(
+                            padding:
+                                MediaQuery.of(bottomSheetContext).viewInsets,
+                            child: MailverificationWidget(),
+                          );
+                        },
+                      ).then((value) => setState(() {}));
+                    }
                   },
                   text: 'Log In',
                   options: FFButtonOptions(
@@ -356,7 +375,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      final user = await signInAnonymously(context);
+                      final user = await authManager.signInAnonymously(context);
                       if (user == null) {
                         return;
                       }

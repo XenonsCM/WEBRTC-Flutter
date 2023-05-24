@@ -37,6 +37,8 @@ class _FriendListWidgetState extends State<FriendListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
       child: Row(

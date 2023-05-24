@@ -1,16 +1,18 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'auth/firebase_user_provider.dart';
-import 'auth/auth_util.dart';
+import 'auth/firebase_auth/firebase_user_provider.dart';
+import 'auth/firebase_auth/auth_util.dart';
 
 import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'index.dart';
 
 void main() async {
@@ -19,7 +21,13 @@ void main() async {
 
   await FlutterFlowTheme.initialize();
 
-  runApp(MyApp());
+  final appState = FFAppState(); // Initialize FFAppState
+  await appState.initializePersistedState();
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => appState,
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -35,8 +43,8 @@ class _MyAppState extends State<MyApp> {
   Locale? _locale;
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
 
-  late Stream<VafeeFirebaseUser> userStream;
-  VafeeFirebaseUser? initialUser;
+  late Stream<BaseAuthUser> userStream;
+  BaseAuthUser? initialUser;
   bool displaySplashImage = true;
 
   final authUserSub = authenticatedUserStream.listen((_) {});
@@ -130,47 +138,112 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'chatMain': ChatMainWidget(),
+      'HomePage': HomePageWidget(),
       'myProfile': MyProfileWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
+
+    final MediaQueryData queryData = MediaQuery.of(context);
+
     return Scaffold(
-      body: _currentPage ?? tabs[_currentPageName],
-      bottomNavigationBar: BottomNavigationBar(
+      body: MediaQuery(
+          data: queryData.copyWith(
+            size: Size(
+              queryData.size.width,
+              queryData.size.height + queryData.padding.bottom,
+            ),
+          ),
+          child: _currentPage ?? tabs[_currentPageName]!),
+      extendBody: true,
+      bottomNavigationBar: FloatingNavbar(
         currentIndex: currentIndex,
         onTap: (i) => setState(() {
           _currentPage = null;
           _currentPageName = tabs.keys.toList()[i];
         }),
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        backgroundColor: Color(0xFF040F17),
         selectedItemColor: Color(0xFF4B39EF),
         unselectedItemColor: Color(0x98939393),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.chat_bubble_outline,
-              size: 24.0,
+        selectedBackgroundColor: Color(0x00000000),
+        borderRadius: 8.0,
+        itemBorderRadius: 8.0,
+        margin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+        padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+        width: double.infinity,
+        elevation: 0.0,
+        items: [
+          FloatingNavbarItem(
+            customWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  currentIndex == 0
+                      ? Icons.chat_bubble_rounded
+                      : Icons.chat_bubble_outline,
+                  color:
+                      currentIndex == 0 ? Color(0xFF4B39EF) : Color(0x98939393),
+                  size: 24.0,
+                ),
+                Text(
+                  'Chats',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: currentIndex == 0
+                        ? Color(0xFF4B39EF)
+                        : Color(0x98939393),
+                    fontSize: 11.0,
+                  ),
+                ),
+              ],
             ),
-            activeIcon: Icon(
-              Icons.chat_bubble_rounded,
-              size: 24.0,
-            ),
-            label: '',
-            tooltip: '',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle_outlined,
-              size: 24.0,
+          FloatingNavbarItem(
+            customWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.home_outlined,
+                  color:
+                      currentIndex == 1 ? Color(0xFF4B39EF) : Color(0x98939393),
+                  size: 24.0,
+                ),
+                Text(
+                  'Home',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: currentIndex == 1
+                        ? Color(0xFF4B39EF)
+                        : Color(0x98939393),
+                    fontSize: 11.0,
+                  ),
+                ),
+              ],
             ),
-            activeIcon: Icon(
-              Icons.account_circle_rounded,
-              size: 24.0,
+          ),
+          FloatingNavbarItem(
+            customWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  currentIndex == 2
+                      ? Icons.account_circle_rounded
+                      : Icons.account_circle_outlined,
+                  color:
+                      currentIndex == 2 ? Color(0xFF4B39EF) : Color(0x98939393),
+                  size: 24.0,
+                ),
+                Text(
+                  'Profile',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: currentIndex == 2
+                        ? Color(0xFF4B39EF)
+                        : Color(0x98939393),
+                    fontSize: 11.0,
+                  ),
+                ),
+              ],
             ),
-            label: '',
-            tooltip: '',
           )
         ],
       ),

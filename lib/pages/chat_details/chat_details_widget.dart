@@ -68,6 +68,8 @@ class _ChatDetailsWidgetState extends State<ChatDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -163,7 +165,7 @@ class _ChatDetailsWidgetState extends State<ChatDetailsWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        columnUsersRecord.displayName!,
+                        columnUsersRecord.displayName,
                         textAlign: TextAlign.center,
                         style:
                             FlutterFlowTheme.of(context).headlineSmall.override(
@@ -181,7 +183,7 @@ class _ChatDetailsWidgetState extends State<ChatDetailsWidget> {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
                         child: Text(
-                          columnUsersRecord.email!,
+                          columnUsersRecord.email,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Lexend Deca',
@@ -216,7 +218,7 @@ class _ChatDetailsWidgetState extends State<ChatDetailsWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 8.0, 0.0, 0.0),
                                 child: Text(
-                                  columnUsersRecord.userRole!,
+                                  columnUsersRecord.userRole,
                                   style:
                                       FlutterFlowTheme.of(context).titleSmall,
                                 ),
@@ -274,6 +276,10 @@ class _ChatDetailsWidgetState extends State<ChatDetailsWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primary,
         automaticallyImplyLeading: false,
         leading: InkWell(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () async {
             await Navigator.push(
               context,
@@ -292,7 +298,7 @@ class _ChatDetailsWidgetState extends State<ChatDetailsWidget> {
           ),
         ),
         title: Text(
-          widget.chatUser!.displayName!,
+          widget.chatUser!.displayName,
           style: FlutterFlowTheme.of(context).titleSmall.override(
                 fontFamily: 'Lexend Deca',
                 color: FlutterFlowTheme.of(context).tertiary,
@@ -302,6 +308,10 @@ class _ChatDetailsWidgetState extends State<ChatDetailsWidget> {
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
             child: InkWell(
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onTap: () async {
                 scaffoldKey.currentState!.openEndDrawer();
               },
@@ -317,6 +327,7 @@ class _ChatDetailsWidgetState extends State<ChatDetailsWidget> {
         elevation: 3.0,
       ),
       body: SafeArea(
+        top: true,
         child: StreamBuilder<FFChatInfo>(
           stream: FFChatManager.instance.getChatInfo(
             otherUserRecord: widget.chatUser,

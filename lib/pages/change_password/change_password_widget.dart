@@ -1,4 +1,4 @@
-import '/auth/auth_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -37,6 +37,8 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).dark900,
@@ -44,6 +46,10 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         automaticallyImplyLeading: false,
         leading: InkWell(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () async {
             Navigator.pop(context);
           },
@@ -143,7 +149,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                     );
                     return;
                   }
-                  await resetPassword(
+                  await authManager.resetPassword(
                     email: _model.emailAddressController.text,
                     context: context,
                   );

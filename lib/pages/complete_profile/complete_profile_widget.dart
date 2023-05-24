@@ -1,11 +1,11 @@
-import '/auth/auth_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
-import '/main.dart';
+import '/pages/login/login_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,6 +44,8 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -66,6 +68,10 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
             child: Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
               child: InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
                 onTap: () async {
                   final selectedMedia = await selectMedia(
                     maxWidth: 1000.00,
@@ -91,6 +97,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                 bytes: m.bytes,
                                 height: m.dimensions?.height,
                                 width: m.dimensions?.width,
+                                blurHash: m.blurHash,
                               ))
                           .toList();
 
@@ -301,7 +308,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => NavBarPage(initialPage: 'chatMain'),
+                    builder: (context) => LoginWidget(),
                   ),
                 );
               },

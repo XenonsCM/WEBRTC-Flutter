@@ -1,4 +1,4 @@
-import '/auth/auth_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/empty_list/empty_list_widget.dart';
 import '/flutter_flow/chat/index.dart';
@@ -39,6 +39,8 @@ class _ChatMainWidgetState extends State<ChatMainWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<UsersRecord>(
       stream: UsersRecord.getDocument(currentUserReference!),
       builder: (context, snapshot) {
@@ -93,6 +95,7 @@ class _ChatMainWidgetState extends State<ChatMainWidget> {
             elevation: 4.0,
           ),
           body: SafeArea(
+            top: true,
             child: StreamBuilder<List<ChatsRecord>>(
               stream: queryChatsRecord(
                 queryBuilder: (chatsRecord) => chatsRecord

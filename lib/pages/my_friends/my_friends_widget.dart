@@ -37,6 +37,8 @@ class _MyFriendsWidgetState extends State<MyFriendsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -136,6 +138,10 @@ class _MyFriendsWidgetState extends State<MyFriendsWidget> {
                               ),
                             ),
                             child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
                               onTap: () async {
                                 await Navigator.push(
                                   context,
@@ -200,7 +206,7 @@ class _MyFriendsWidgetState extends State<MyFriendsWidget> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Text(
-                                              columnUsersRecord.displayName!,
+                                              columnUsersRecord.displayName,
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .titleMedium,
@@ -216,7 +222,7 @@ class _MyFriendsWidgetState extends State<MyFriendsWidget> {
                                                     .fromSTEB(
                                                         0.0, 4.0, 4.0, 0.0),
                                                 child: Text(
-                                                  columnUsersRecord.email!,
+                                                  columnUsersRecord.email,
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodySmall

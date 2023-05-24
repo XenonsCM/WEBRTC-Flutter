@@ -1,10 +1,11 @@
-import '/auth/auth_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/main.dart';
 import '/pages/complete_profile/complete_profile_widget.dart';
+import '/pages/custom_page/custom_page_widget.dart';
 import '/pages/login/login_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).dark900,
@@ -70,7 +73,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 24.0),
                   child: Image.asset(
-                    'assets/images/logoGeekMessaging.png',
+                    'assets/images/vafee-logo-1.png',
                     width: 160.0,
                     height: 140.0,
                     fit: BoxFit.cover,
@@ -332,7 +335,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       return;
                     }
 
-                    final user = await createAccountWithEmail(
+                    final user = await authManager.createAccountWithEmail(
                       context,
                       _model.emailAddressController.text,
                       _model.passwordController.text,
@@ -348,6 +351,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         .doc(user.uid)
                         .update(usersCreateData);
 
+                    await authManager.sendEmailVerification();
                     await Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
@@ -428,11 +432,39 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ],
                   ),
                 ),
+                FFButtonWidget(
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CustomPageWidget(),
+                      ),
+                    );
+                  },
+                  text: 'Conference',
+                  options: FFButtonOptions(
+                    width: 130.0,
+                    height: 40.0,
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: FlutterFlowTheme.of(context).primary,
+                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                          fontFamily: 'Lexend Deca',
+                          color: Colors.white,
+                        ),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 10.0),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      final user = await signInAnonymously(context);
+                      final user = await authManager.signInAnonymously(context);
                       if (user == null) {
                         return;
                       }
