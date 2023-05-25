@@ -1,6 +1,5 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
-import '/calendar/event_builder/event_builder_widget.dart';
-import '/calendar/event_details/event_details_widget.dart';
 import '/flutter_flow/flutter_flow_calendar.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -50,13 +49,14 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EventBuilderWidget(
-                  choosedDate: FFAppState().selectedDate!,
+            context.pushNamed(
+              'EventBuilder',
+              queryParams: {
+                'choosedDate': serializeParam(
+                  FFAppState().selectedDate,
+                  ParamType.DateTime,
                 ),
-              ),
+              }.withoutNulls,
             );
           },
           backgroundColor: FlutterFlowTheme.of(context).primary,
@@ -115,7 +115,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                               _model.calendarSelectedDay?.start)
                       .where('date',
                           isLessThanOrEqualTo: functions.futureDate(
-                              FFAppState().selectedDate, 0, 0, 0, 1)),
+                              FFAppState().selectedDate, 0, 0, 0, 1))
+                      .where('created_by', isEqualTo: currentUserReference),
                 ),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
@@ -179,16 +180,26 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EventDetailsWidget(
-                                  docRef: listViewTodoRecord.reference,
-                                  description: '',
-                                  status: '',
-                                  taskName: '',
+                            context.pushNamed(
+                              'EventDetails',
+                              queryParams: {
+                                'docRef': serializeParam(
+                                  listViewTodoRecord.reference,
+                                  ParamType.DocumentReference,
                                 ),
-                              ),
+                                'description': serializeParam(
+                                  '',
+                                  ParamType.String,
+                                ),
+                                'status': serializeParam(
+                                  '',
+                                  ParamType.String,
+                                ),
+                                'taskName': serializeParam(
+                                  '',
+                                  ParamType.String,
+                                ),
+                              }.withoutNulls,
                             );
                           },
                           child: ListTile(
@@ -246,10 +257,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     style: FlutterFlowTheme.of(context).bodyMedium,
                   );
                 },
-              ),
-              Text(
-                dateTimeFormat('yMd', FFAppState().selectedDate),
-                style: FlutterFlowTheme.of(context).bodyMedium,
               ),
             ],
           ),

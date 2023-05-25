@@ -44,10 +44,10 @@ class TodoRecord extends FirestoreRecord {
   DocumentReference? get createdBy => _createdBy;
   bool hasCreatedBy() => _createdBy != null;
 
-  // "items" field.
-  List<String>? _items;
-  List<String> get items => _items ?? const [];
-  bool hasItems() => _items != null;
+  // "owner" field.
+  String? _owner;
+  String get owner => _owner ?? '';
+  bool hasOwner() => _owner != null;
 
   void _initializeFields() {
     _title = snapshotData['title'] as String?;
@@ -56,7 +56,7 @@ class TodoRecord extends FirestoreRecord {
     _isDone = snapshotData['is_done'] as bool?;
     _userImage = snapshotData['user_image'] as String?;
     _createdBy = snapshotData['created_by'] as DocumentReference?;
-    _items = getDataList(snapshotData['items']);
+    _owner = snapshotData['owner'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -91,6 +91,7 @@ Map<String, dynamic> createTodoRecordData({
   bool? isDone,
   String? userImage,
   DocumentReference? createdBy,
+  String? owner,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -100,6 +101,7 @@ Map<String, dynamic> createTodoRecordData({
       'is_done': isDone,
       'user_image': userImage,
       'created_by': createdBy,
+      'owner': owner,
     }.withoutNulls,
   );
 

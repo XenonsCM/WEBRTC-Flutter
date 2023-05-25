@@ -3,7 +3,6 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/task_controller/task_builder/task_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -133,7 +132,7 @@ class _TaskPageWidgetState extends State<TaskPageWidget> {
                           },
                           text: 'Active',
                           icon: Icon(
-                            Icons.airplanemode_active,
+                            Icons.access_time,
                             size: 15.0,
                           ),
                           options: FFButtonOptions(
@@ -202,18 +201,34 @@ class _TaskPageWidgetState extends State<TaskPageWidget> {
                         hoverColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TaskBuilderWidget(
-                                description: listViewTasksRecord.description,
-                                owner: listViewTasksRecord.owner,
-                                status: listViewTasksRecord.status,
-                                taskName: listViewTasksRecord.taskName,
-                                docRef: listViewTasksRecord.reference,
-                                lastEdited: listViewTasksRecord.lastEdited,
+                          context.pushNamed(
+                            'TaskBuilder',
+                            queryParams: {
+                              'description': serializeParam(
+                                listViewTasksRecord.description,
+                                ParamType.String,
                               ),
-                            ),
+                              'owner': serializeParam(
+                                listViewTasksRecord.owner,
+                                ParamType.String,
+                              ),
+                              'status': serializeParam(
+                                listViewTasksRecord.status,
+                                ParamType.String,
+                              ),
+                              'taskName': serializeParam(
+                                listViewTasksRecord.taskName,
+                                ParamType.String,
+                              ),
+                              'docRef': serializeParam(
+                                listViewTasksRecord.reference,
+                                ParamType.DocumentReference,
+                              ),
+                              'lastEdited': serializeParam(
+                                listViewTasksRecord.lastEdited,
+                                ParamType.DateTime,
+                              ),
+                            }.withoutNulls,
                           );
                         },
                         child: ListTile(

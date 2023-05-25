@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -296,18 +295,15 @@ class _EventBuilderWidgetState extends State<EventBuilderWidget> {
               ),
               FFButtonWidget(
                 onPressed: () async {
-                  final todoCreateData = {
-                    ...createTodoRecordData(
-                      title: _model.textController2.text,
-                      description: _model.textController3.text,
-                      date: widget.choosedDate,
-                      isDone: false,
-                      userImage: '',
-                      createdBy: currentUserReference,
-                    ),
-                    'items': List.generate(random_data.randomInteger(0, 2),
-                        (index) => random_data.randomName(true, false)),
-                  };
+                  final todoCreateData = createTodoRecordData(
+                    title: _model.textController2.text,
+                    description: _model.textController3.text,
+                    date: widget.choosedDate,
+                    isDone: false,
+                    userImage: '',
+                    createdBy: currentUserReference,
+                    owner: currentUserUid,
+                  );
                   await TodoRecord.collection.doc().set(todoCreateData);
                 },
                 text: 'Confirm',

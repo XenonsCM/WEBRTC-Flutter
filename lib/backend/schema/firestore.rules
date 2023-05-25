@@ -23,32 +23,25 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    match /classes/{document} {
-      allow create: if request.auth != null;
-      allow read: if true;
-      allow write: if false;
-      allow delete: if false;
-    }
-
     match /announcements/{document} {
       allow create: if true;
       allow read: if true;
-      allow write: if false;
-      allow delete: if false;
+      allow write: if true;
+      allow delete: if true;
     }
 
     match /tasks/{document} {
       allow create: if true;
       allow read: if true;
-      allow write: if false;
-      allow delete: if false;
+      allow write: if true;
+      allow delete: if true;
     }
 
     match /todo/{document} {
-      allow create: if true;
-      allow read: if true;
-      allow write: if false;
-      allow delete: if false;
+      allow create: if request.resource.data.created_by == /databases/$(database)/documents/users/$(request.auth.uid);
+      allow read: if request.auth != null;
+      allow write: if resource.data.created_by == /databases/$(database)/documents/users/$(request.auth.uid);
+      allow delete: if resource.data.created_by == /databases/$(database)/documents/users/$(request.auth.uid);
     }
   }
 }
